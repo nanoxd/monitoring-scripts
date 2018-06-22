@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ## Description:
 # Pulls IPMI info from Supermicro Motherboard
-# to feed into Telegraf
+# to feed into InfluxDB
 
 ## Requirements
 # ipmitool
@@ -11,8 +11,8 @@ HOST="10.0.0.150"
 HOST_NAME="Gringotts"
 IPMI_USER=""
 IPMI_PASS=""
-TELEGRAF_HOST="localhost:8086"
-TELEGRAF_DB="home"
+INFLUX_HOST=""
+INFLUX_DB=""
 
 get_value() {
     key="$1"
@@ -57,7 +57,7 @@ print_data () {
 send_sensor_data() {
     sensor="$1"
     value="$2"
-    curl -i -XPOST "http://$TELEGRAF_HOST/write?db=$TELEGRAF_DB" --data-binary "health_data,host=$HOST_NAME,sensor=$sensor value=${value:=0}"
+    curl -i -XPOST "http://$INFLUX_HOST/write?db=$INFLUX_DB" --data-binary "health_data,host=$HOST_NAME,sensor=$sensor value=${value:=0}"
 }
 
 write_data () {
